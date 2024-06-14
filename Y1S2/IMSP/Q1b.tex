@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+
+
+\begin{document}
+
+\section{Math principle}
+\begin{eqnarray}
+\int_{1}^{n}\frac{1}{x}\,dx &=& \left[\ln |x|\right]_1^n \nonumber\\
+&=& \ln n - \ln 1 = \ln n \label{eqn1}
+\end{eqnarray}
+
+
+\section{Experiment data}
+\begin{table}[h]
+\centering
+\begin{tabular}{|c||c|c|}
+\hline
+slider $n$ & myarea & mylog \\
+\hline
+3& 1.0986 & 1.0986 \\
+\hline
+6& 1,7918 & 1.7918 \\
+\hline
+9& 2.1972 & 2.1972\\
+\hline
+\end{tabular}
+\caption{Data from GeoGebra}
+\end{table}
+
+\section{Observation}
+
+The animation and Equation (\ref{eqn1}) demonstrate that the area bounded by the function $f(x)=\frac{1}{x}$ on a specific interval $[1, n]$ can be used for computing the value of $\ln n.$ In addition, as $n\to\infty$, the area is not finite because $\ln n\rightarrow \infty$.\\
+
+
+
+\end{document}

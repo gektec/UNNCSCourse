@@ -1,0 +1,261 @@
+\documentclass{article}
+%************Preamble*************
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand{\ds}{\displaystyle} 
+% User-defined new command \ds for replacing a longer one \displaystyle.
+\newcommand{\crt}{\sqrt[3]} 
+% User-defined new command \crt for Cube RooT.
+
+\begin{document}
+%************Content**************
+
+{\Large Lecture 2 Notes}\\[1cm] 
+
+\textbf{Inline math vs. Display math:} \\ % \textbf{} is used for boldface font
+
+Differences between inline math $\sum_{k=1}^n$, $\int_{10}^{20} f(x)\, dx$, $\frac{1}{x}$
+and display math
+\[
+\sum_{k=1}^n
+\]
+
+\[
+\int_{10}^{20} f(x)\, dx
+\]
+
+\[
+\frac{1}{x}
+\]
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{\textbackslash displaystyle command:}\\
+
+Compare the differences between $f(x)=\frac{1}{1+x^2}$ and $f(x)=\displaystyle\frac{1}{1+x^2}$
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{User-defined new command:}\\
+
+% Example 1
+Same outputs for $\ds \frac{1}{1+x^2}$ and $\displaystyle \frac{1}{1+x^2}$.\\
+
+% Example 2
+Same outputs for $\crt{x}$ and $\sqrt[3]{x}$.\\
+
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{Fitting bracket size:}\\
+
+\[
+(\frac{1}{1+x^2})^3 % not a proper bracket size 
+\]  
+
+\[
+\left(\frac{1}{1+x^2}\right)^3 % a good one
+\]
+
+\[
+\lim_{x\to 0} \left( \frac{\sin x}{x} \right)^3 = 1 % a good one
+\]
+
+\[
+\left| 
+\frac{1-i}{1+i} % a good one
+\right|
+\]
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{Equation \& Eqnarray:}\\ 
+
+\begin{equation}% Equation Example 1
+x + \sin x = x^2
+\end{equation}
+\begin{equation}% Equation Example 2
+\frac{dy}{dx} = \tan x
+\end{equation}
+\begin{equation}% Equation Example 3
+\sqrt[3]{x} + \log_2 x = \pi
+\end{equation}
+
+
+\begin{eqnarray} % Eqnarray Example 1
+x + \sin x &=& x^2 \\
+\frac{dy}{dx} &=& \tan x \\
+\sqrt[3]{x} + \log_2 x &=& \pi
+\end{eqnarray}
+
+\begin{eqnarray} % Eqnarray Example 2
+(1+x)^4 &=& (1+x)^2\cdot (1+x)^2 \\
+&=& (1+2x+x^2)\cdot (1+2x+x^2)\\
+&=& 1 + 4x + 6x^2 + 4x^3 + x^4
+\end{eqnarray}
+
+\begin{eqnarray} % Eqnarray Example 3
+&&(1+x)^4 \\
+&=& (1+x)^2\cdot (1+x)^2 \\
+&=& (1+2x+x^2)\cdot (1+2x+x^2)\\
+&=& \cdots
+\end{eqnarray}
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{Suppressing Equation Numbers:}\\
+
+\begin{equation*}
+\sin 2\theta = 2 \sin\theta\cos\theta
+\end{equation*}
+
+
+\begin{eqnarray*} % Eqnarray Example 4
+(1+x)^4 &=& (1+x)^2\cdot (1+x)^2 \\
+&=& (1+2x+x^2)\cdot (1+2x+x^2)\\
+&=& 1 + 4x + 6x^2 + 4x^3 + x^4
+\end{eqnarray*}
+
+\begin{eqnarray} % Eqnarray Example 5
+(1+x)^4 &=& (1+x)^2\cdot (1+x)^2 \nonumber \\
+&=& (1+2x+x^2)\cdot (1+2x+x^2) \\
+&=& 1 + 4x + 6x^2 + 4x^3 + x^4 \nonumber
+\end{eqnarray}
+
+\newpage % starting a new page
+
+\textbf{Arrays:}\\
+
+\[ % math environment needed
+\begin{array}{rl} % Array Example 1
+12 & 33 \\
+5 & 7 \\
+29 & 11
+\end{array}
+\]
+
+$$
+\begin{array}{ccc} % Array Example 2
+x^{10} & \cos x & \ln x\\
+10x^9 & -\sin x &\frac{1}{x}
+\end{array}
+$$
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{Matrix:}\\
+
+$
+\left(
+\begin{array}{rl} % Matrix Example 1
+12 & 33 \\
+5 & 7 \\
+29 & 11
+\end{array}
+\right)
+$
+\hspace{8mm}
+$
+\left[
+\begin{array}{cc} % Matrix Example 2
+12 & 33 \\
+5 & 7 \\
+29 & 11
+\end{array}
+\right]
+$
+\newline
+
+\[
+A=
+\left[
+\begin{array}{cc} % Matrix Example 3
+1 & 2 \\
+3 & 4
+\end{array}
+\right]
+\Rightarrow
+\det(A)=1\times 4-2\times 3 = -2
+\]
+
+
+\vspace{1cm}
+%************New Topic **************
+\textbf{Piecewise function: }\\
+
+\[
+|x| = 
+\left\{ % left curly bracket
+\begin{array}{lcc} %Piecewise function Example 1
+x & ; & x>0\\
+0 & ; & x=0\\
+-x & ; & x<0
+\end{array}
+\right. % pairing with \left
+\]
+
+$$
+|x| = 
+\left\{ 
+\begin{array}{rc} %Piecewise function Example 2
+x; & x\ge 0\\
+-x; & x<0 
+\end{array}
+\right.
+$$
+
+
+\newpage
+%************New Topic **************
+\textbf{Tabular:} \\
+
+\begin{tabular}{|c|c|}  % Table Example 1
+\hline
+True & False \\
+\hline
+1 & 0 \\
+\hline
+\end{tabular}
+
+\vspace{5mm}
+
+\begin{tabular}{c|rr} % Table Example 2
+$f(x)$ &  $f'(x)$  &  $f''(x)$\\[1ex]
+\hline
+$x^2$ &  $2x$   &  2\\
+\hline
+$\sin x$ & $\cos x$ & $-\sin x$
+\end{tabular}
+
+
+\vspace{1cm}
+\textbf{Table:} \\
+
+\begin{table}[h]  % this table goes here
+\centering % for centering the table
+\begin{tabular}{|c|c|c|c|} % Table Example 3
+\hline
+Name & Age & Gender & Group \\
+\hline
+Alice & 18 & F & C21\\
+\hline
+Bob & 20 & M & A29\\
+\hline
+David & 19 & M & C25\\
+\hline
+\end{tabular}
+\caption{Student list} % adding table discription
+\end{table}
+
+
+
+
+
+
+
+
+
+%************End**************
+\end{document}

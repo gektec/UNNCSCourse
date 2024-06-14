@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <label for="age">How old are you?</label>
+    <input type="text" value="" id="age">
+    <button onclick="Validate()">
+      Validate
+    </button>
+
+    <script>
+    function Validate(){
+      age = Number.parseInt(document.getElementById('age').value);
+      if (Number.isNaN(age)){
+        alert("Invalid: Please enter a valid number");
+      }
+      else if (age < 0){
+        alert("Invalid: Please enter a positive number");
+      }
+      else{
+        alert(`Valid: You are ${age} years old.`);
+      }
+    }
+    </script>
+  </body>
+</html>

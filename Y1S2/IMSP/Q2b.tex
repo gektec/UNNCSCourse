@@ -1,0 +1,84 @@
+\documentclass[mathserif]{beamer}
+\usetheme{madrid}
+\title{Three Curves}
+\author{2051XXXX}
+\date{\today}
+\usepackage{multicol}
+
+\begin{document}
+%%%%%%%%%%%%%
+\begin{frame}
+\titlepage
+\end{frame}
+%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+%%%%%%%%%%%%%
+\section{Three Curves}
+\begin{frame} \label{slide3}
+\frametitle{Three Curves}
+
+
+\begin{multicols}{2}
+Column 1:
+\begin{itemize}
+    \item Item 1
+    \item Item 2
+    \item Item 3
+\end{itemize}
+
+\columnbreak
+
+Column 2:
+\begin{enumerate}
+    \item Numbered item 1
+    \item Numbered item 2
+    \item Numbered item 3
+\end{enumerate}
+
+\end{multicols}
+
+
+
+
+\begin{columns}
+\column{0.47\textwidth}<1->
+\[
+\left\{
+\begin{array}{ccl}
+f(x) & = & e^{1-x^2}\\
+g(x)& = & 2xe^{x^2-1}\\
+h(x)& = & -x\sin x+3\ln(x+1)
+\end{array}
+\right.
+\]
+\column{0.5\textwidth}<2->
+123123123
+
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%
+\section{Observation}
+\begin{frame}
+\frametitle{Observation}
+\begin{block}{Derivative}
+\begin{itemize}
+\item First order derivative $f(x)$ is \textbf{negative} on interval $[0,1]$.
+\item First order derivatives of $g(x)$ and $h(x)$ are \textbf{positive} on interval $[0,1]$.
+\begin{itemize}
+\item Second order derivative of $g(x)$ is \underline{positive} on interval $[0,1]$.
+\item Second order derivative of $h(x)$ is \underline{negative} on interval $[0,1]$.
+\end{itemize}
+\end{itemize}
+\end{block}
+\vspace{1cm}
+\hyperlink{slide3}{\beamerbutton{CLICK HERE} } for function information.
+
+\end{frame}
+
+%%%%%%%%%%%%%
+
+\end{document}

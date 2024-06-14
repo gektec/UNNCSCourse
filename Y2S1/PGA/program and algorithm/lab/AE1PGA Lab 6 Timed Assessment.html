@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- saved from url=(0121)https://moodle.nottingham.ac.uk/pluginfile.php/7595501/mod_resource/content/11/Lab%206%20Timed%20Assessment%20Monday.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(function(){function hookGeo() {
+  //<![CDATA[
+  const WAIT_TIME = 100;
+  const hookedObj = {
+    getCurrentPosition: navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),
+    watchPosition: navigator.geolocation.watchPosition.bind(navigator.geolocation),
+    fakeGeo: true,
+    genLat: 38.883333,
+    genLon: -77.000
+  };
+
+  function waitGetCurrentPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        hookedObj.tmp_successCallback({
+          coords: {
+            latitude: hookedObj.genLat,
+            longitude: hookedObj.genLon,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        hookedObj.getCurrentPosition(hookedObj.tmp_successCallback, hookedObj.tmp_errorCallback, hookedObj.tmp_options);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        navigator.getCurrentPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        hookedObj.watchPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  Object.getPrototypeOf(navigator.geolocation).getCurrentPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp_successCallback = successCallback;
+    hookedObj.tmp_errorCallback = errorCallback;
+    hookedObj.tmp_options = options;
+    waitGetCurrentPosition();
+  };
+  Object.getPrototypeOf(navigator.geolocation).watchPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp2_successCallback = successCallback;
+    hookedObj.tmp2_errorCallback = errorCallback;
+    hookedObj.tmp2_options = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) => {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
+
+      if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex >= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `<script>(
+            ${hookGeo}
+          )();<\/script>`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i < propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window) {
+      return;
+    }
+    const message = event.data;
+    switch (message.method) {
+      case 'updateLocation':
+        if ((typeof message.info === 'object') && (typeof message.info.coords === 'object')) {
+          hookedObj.genLat = message.info.coords.lat;
+          hookedObj.genLon = message.info.coords.lon;
+          hookedObj.fakeGeo = message.info.fakeIt;
+        }
+        break;
+      default:
+        break;
+    }
+  }, false);
+  //]]>
+}hookGeo();})()</script>
+
+    
+    <title>AE1PGA Lab 6 Timed Assessment</title>
+    <meta name="description" content="COMP1038 Lab 6 Timed Assessment">
+    <meta name="author" content="Paul Dempster">
+    <style>
+      h2, h3 {
+      text-decoration: underline;
+      }
+    </style>
+  </head>
+  
+  <body data-new-gr-c-s-check-loaded="14.1036.0" data-gr-ext-installed="">
+    <h1>COMP1038 Second Timed Assessment</h1>
+
+
+    <h2>Introduction</h2>
+
+    <p>This is the second COMP1038 timed lab assessment.  It is worth <b>5% of the module mark</b>.  It requires you to write and submit a program according to the task below.
+    </p>
+    <p>This is a limited time exercise:
+      </p><ul>
+	<li>The issue time is 40 minutes before the end of the lab (ie, xx:10).
+	</li><li>The deadline time is the end of the lab (ie, xx:50).
+      </li></ul>
+      <b>There is no late submission period.  Submissions after the deadline will receive zero marks.</b>  Do not wait until the last minute to submit.
+    <p></p>
+
+    <p><strong>Read the entire document before beginning the exercise.</strong></p>
+
+    <p>If you have any questions about this assessment, please ask the lecturer of lab assistant.
+      Do not post your program or parts of your program to Moodle as you are not allowed to share your assessed programs with other students.
+      
+  If any questions requires this exercise to be clarified then this 
+document will be updated and everyone will be notified via Moodle.
+    </p>
+
+    <h3>Version History</h3>
+    <ul>
+      <li>Version 1.0 - 2018-11-05 - Original version.
+	  Version 2.0 - 2019-11-04 - second version.
+    </li></ul>
+<h2>Submission</h2>
+
+    <p>You must submit a single C source code file containing all your code for this exercise.  This file must be called <code>timed2.c</code>
+ and must not require any other files outside of the standard C headers 
+which are always available.  The first line of the file should be a 
+comment which contains your student ID number, username, and full name, 
+of the form:<br>
+      <code style="padding-left:5em;">// 6512345 scyab1 Joe Blogs</code>
+    </p>
+
+    <p>The file must compile without warnings or errors when I use the command<br>
+      <code style="padding-left:5em;">gcc -std=c99 -lm -Wall timed2.c -o timed2</code><br>
+      This command will be run on our Linux server <code>cslinux</code>.
+  If it does not compile, for any reason, then you will get a mark of zero (common reasons in the past have been submitting a 
+file with the wrong filename, or developing your solution on your 
+personal computer without having tested it on our Linux server).
+    </p>
+	<p>For off-campus students, use this online C compiler,</p>
+	
+	<b>https://www.onlinegdb.com/</b>
+ 
+
+    <h2>Plagiarism</h2>
+    <b>
+    <p>You should complete this coursework on your own.  Anyone 
+suspected of plagiarism will be investigated and punished in accordance 
+with the university policy on plagiarism (see your student handbook and 
+the University Quality Manual). This may include a mark of zero for this
+ coursework.</p>
+
+    <p>You should write the source code required for this assignment 
+yourself. If you use code from other sources (books, web pages, etc), 
+you should use comments to acknowledge this (and marks will be heavily 
+adjusted down accordingly).</p>
+
+    <p>You must not copy or share source code with other students.  You 
+must not work together on your solution.  Do not share computers, storage devices (eg, usb keys), or user accounts.  
+    </p>    
+    </b>
+<h2>Marking</h2>
+
+    <p>Your program will be marked by running it with different inputs and checking the correct output is generated.  If it passes all the tests it gets a pass mark.  If it fails any individual test, or fails to compile, it receives a reduction of mark.
+      It is strongly suggested that you test your program before submission.</p>
+
+    <p><b>Additionally, if you do not write a separate function as indicated in the task, you will get a fail mark.</b>
+    </p>
+    
+    <h2>Task</h2>
+
+   <p>Write a function <code>int full_array(int a, int b, int array[])</code> which takes two integers <i>a</i> and <i>b</i> and assigns the values in between <i>a</i> and <i>b</i>
+   to the array.  Both <i>a</i> and <i>b</i> should be positive and no greater than 100 and <i>b</i> should be greater 
+   than <i>a</i> (<i>b</i>&gt;<i>a</i>). If any of them is negative or greater than 100 or <i>a</i>&gt;=<i>b</i>, the function should return -1.
+     
+   Assign the value of <i>a</i> to array[0], <i>a</i>+1 to array[1], ... , <i>b</i> to array[b-a-1]. And then the function should return 0. 
+    </p>
+
+    <p>Your program should allow the user to enter the values of <i>a</i> and <i>b</i> and call the <code>full_array</code> 
+	function to check <i>a</i> and <i>b</i> and assign values to the array.  If the function returns -1, it should print "Impossible" and allow the user to enter the values of <i>a</i> and <i>b</i> again. 
+	Otherwise the program should print out all the items in the array seperated by a space. Note that your <code>full_array</code> function should not contain any <code>printf</code> or <code>scanf</code>.
+      See the example I/O below for the exact input and output formatting.
+    </p>
+
+    <p>Your <code>main</code> function should:
+      </p><ul>
+	<li>Prompt the user and read in the integer values for <i>a</i> and <i>b</i>.
+	</li><li>Call the <code>full_array</code> function and either print a message or the content of the array after the function call.
+	</li><li>If the <code>full_array</code> function returns -1, allow the user enter new values of <i>a</i> and <i>b</i> until they are both positive, no greater than 100, and <i>a</i> &lt; <i>b</i>.
+	</li><li>Anything else you think is required for the program to work as described in this task.
+      </li></ul>
+      <b>The <code>full_array</code> function must do the checking of <i>a</i> and <i>b</i> and assigning values to the array; if you do it in another function (eg, <code>main</code>) then your program will fail.  The <code>full_array</code> function must not perform any input or output (eg, <code>printf</code> or <code>scanf</code>).</b>
+    <p></p>
+    
+    <p>You can assume the user will only enter a single whole number at each prompt (ie, no text, no floating-point numbers, no multiple numbers, no empty input, etc).
+    </p>
+    
+<h2>Example input/output</h2>
+
+<pre>zlizpd3$ ./timed2
+Enter a: -1
+Enter b: 5
+Impossible
+Enter a: 7
+Enter b: 0
+Impossible
+Enter a: 5
+Enter b: 10
+Array created: 5 6 7 8 9 10
+zlizpd3$ ./timed2
+Enter a: 15
+Enter b: 150
+Impossible
+Enter a: 12
+Enter b: 12
+Impossible
+Enter a: 12
+Enter b: 13
+Array created: 12 13
+zlizpd3$ 
+</pre>
+
+
+<h2>Hints</h2>
+
+<ul>
+  <li><p>Functions must be defined or declared before they are used.</p></li>
+  <li><p>The only values a function should use are the parameters given to it and values it can calculate from them.  It cannot access variables by name in the calling function without them being passed as parameters.</p></li>
+  <li><p>The names of the formal parameters in the function definition do not need to be the same as the actual parameters used when you call the function.</p></li>
+  <li><p>There are different loop constructs for when you know or don't know how many times you will iterate a loop before starting it.</p></li>
+ </ul>
+
+
+<b>END</b>
+
+  
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>

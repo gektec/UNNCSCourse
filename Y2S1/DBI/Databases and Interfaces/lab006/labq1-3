@@ -1,0 +1,12 @@
+//Written explanation for Q1-Q3
+
+To convert any relation into 1NF, split any non-atomic values
+JUST let "appointment date" be one column and "time" be one column to convert it 
+
+Q1
+INSERT Anomalies:can not add a "appointment data" without "time".
+DELETE Anomalies:IF we remove "S1032" then P110, "John Walker" will be removed as well.
+UPDATE Anomalies:IF we change the patient name"Ian MacKay",we will need to update two rows.
+
+
+

@@ -1,0 +1,94 @@
+-- Include column headers
+.headers on 
+-- Format results by column. This will truncate long results.
+.mode column 
+
+
+-- Drop any tables that exist from a previous session
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS Actor;
+
+-- Exercise 2 Q1
+CREATE TABLE Actor (
+    actID INTEGER,
+    actName VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_actor 
+        PRIMARY KEY (actID)
+);
+
+CREATE TABLE Movie (
+    mvID INTEGER NOT NULL, 
+    actID INTEGER NOT NULL,
+    mvTitle VARCHAR(255) NOT NULL,
+    mvPrice REAL NOT NULL, 
+    mvYear INTEGER NULL,
+    mvGenre VARCHAR(255) NULL,
+    CONSTRAINT pk_mv 
+        PRIMARY KEY (mvID),
+    CONSTRAINT fk_mv_act 
+        FOREIGN KEY (actID) REFERENCES Actor (actID) 
+);
+
+-- Exercise 1
+
+INSERT INTO 
+    Actor (actName) 
+VALUES  
+    ('Arethan Franklin'),
+    ('Barry Nelson'),
+    ('Bullet Prakash'),
+    ('Daniel Craig'),
+    ('James Bond'),
+    ('Jonny Walker'),
+    ('Laura Dern'),
+    ('Mr. Ryan Reynolds');
+
+INSERT INTO 
+    Movie (actID, mvTitle, mvGenre, mvYear, mvPrice) 
+VALUES
+    ((SELECT actID from Actor WHERE actName = 'Barry Nelson'), 'Die Hard with a Vengeance', 'Action',1999,12.24),
+    ((SELECT actID from Actor WHERE actName = 'Barry Nelson'), 'Black Snake Moan', 'Adventure', 2007, 9.99),
+    ((SELECT actID from Actor WHERE actName = 'Arethan Franklin'), 'Snakes on a Plane', 'Comedy',2011, 9.99),
+    ((SELECT actID from Actor WHERE actName = 'Bullet Prakash'), 'Freeway of Love', 'Drama', 2018, 9.99),
+    ((SELECT actID from Actor WHERE actName = 'Daniel Craig'), 'I knew you were waiting for me', 'Comedy', 1997, 12.25),
+    ((SELECT actID from Actor WHERE actName = 'James Bond'), 'The Black Panther', 'Action', 2018,10.99),
+    ((SELECT actID from Actor WHERE actName = 'Jonny Walker'), 'The Jungle book', 'Adventure', 2015, 9.99),
+    ((SELECT actID from Actor WHERE actName = 'Laura Dern'), 'Infinity War', 'Horror', 1975, 8.50),
+    ((SELECT actID from Actor WHERE actName = 'Laura Dern'), 'Coming to Europe', 'Adventure', 2001, 12.99),
+    ((SELECT actID from Actor WHERE actName = 'Mr. Ryan Reynolds'), 'The Midnight', 'Drama',2019, 10.99);
+
+-- Exercise 2
+
+SELECT 
+    mvTitle, mvYear 
+FROM Movie 
+ORDER BY mvYear DESC;
+
+SELECT *
+FROM Movie
+WHERE mvPrice > 10;
+
+SELECT DISTINCT * FROM Actor;
+
+SELECT SUM(mvPrice)
+FROM Movie
+WHERE mvGenre = 'Adventure';
+
+SELECT AVG(mvPrice) as 'AVG Price of Comedy Films'
+FROM Movie
+WHERE mvGenre = 'Comedy';
+
+SELECT COUNT(mvTitle)
+FROM Movie
+WHERE actID = (
+    SELECT actID 
+    FROM Actor 
+    WHERE actName = 'Barry Nelson'
+);
+
+SELECT AVG(2021 - mvYear) FROM Movie;
+
+
+
+
+

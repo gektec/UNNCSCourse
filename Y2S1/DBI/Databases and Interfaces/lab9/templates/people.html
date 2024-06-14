@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>People Records</title>
+		<link rel="stylesheet" href="{{url_for('static',filename='normalize.css')}}">
+		<link rel="stylesheet" href="{{url_for('static',filename='skeleton.css')}}">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<table border = 1 class="u-full-width">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Age</th>
+						</tr>
+					</thead>
+					{% for row in rows %}
+					<tr>
+						<td> {{ row['pID'] }} </td>
+						<td> {{ row['pName'] }} </td>
+						<td> {{ row['sAge'] }} </td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+			
+			<a href="/people/add/">Add a New people</a>
+		</div>
+	</body>
+</html>

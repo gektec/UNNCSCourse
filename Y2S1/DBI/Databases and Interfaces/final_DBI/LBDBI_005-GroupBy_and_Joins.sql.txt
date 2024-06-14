@@ -1,0 +1,184 @@
+.headers ON
+.mode column
+
+----------------
+-- Exercise 1 --
+----------------
+
+DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS Module;
+DROP TABLE IF EXISTS Enrolment;
+
+
+CREATE TABLE Student(
+	sID INTEGER PRIMARY KEY,
+	sName TEXT NOT NULL,
+	sAddress TEXT,
+	sYear INTEGER
+);
+
+INSERT INTO Student
+VALUES
+	(1,'Smith','5 Arnold Close',2),
+	(2,'Brooks','7 Holly Avenue',2),
+	(3,'Anderson','15 Main Street',3),
+	(4,'Evans','Flat 1a, High Street',2),
+	(5,'Harrison','Newark Hall',1),
+	(6,'Jones','Southwell Hall',1);
+
+.print ''
+.print 'Student'
+SELECT * FROM Student;
+
+
+CREATE TABLE Module(
+	mCode VARCHAR(6) PRIMARY KEY,
+	mCredits INTEGER DEFAULT 10,
+	mTitle TEXT NOT NULL
+);
+
+INSERT INTO Module 
+VALUES
+	('G51DBS', 10, 'Database Systems'),
+	('G51PRG', 20, 'Programming'),
+	('G51IAl', 10, 'Artificial Intelligence'),
+	('G52ADS', 10, 'Algorithms');
+
+.print ''
+.print 'Module'
+SELECT * FROM Module;
+
+
+CREATE TABLE Enrolment(
+	sID  INTEGER,
+	mCode VARCHAR(6),
+	PRIMARY KEY(sID, mCode),
+	FOREIGN KEY (sID) REFERENCES Student (sID),
+	FOREIGN KEY (mCode) REFERENCES Module (mCode)
+);
+
+INSERT INTO Enrolment 
+VALUES
+	(1, 'G52ADS'),
+	(2, 'G52ADS'),
+	(5, 'G51DBS'),
+	(5, 'G51PRG'),
+	(5, 'G51IAl'),
+	(4, 'G52ADS'),
+	(6, 'G51PRG'),
+	(6, 'G51lAI');
+
+.print ''
+.print 'Enrolment'
+SELECT * FROM Enrolment;
+
+
+----------------
+-- Exercise 2 --
+----------------
+
+-- 2.1
+.print ''
+.print '2.1 - List of Students ordered by Year (DESC) and Name (ASC).'
+
+SELECT 
+	sName as 'Student Name',
+	sYear as 'Year of Study'
+FROM
+	Student
+ORDER BY
+	sYear DESC,
+	sName ASC;
+
+-- 2.2
+.print ''
+.print '2.2 - Number of Students Enrolled in each Module.'
+
+SELECT 
+	mCode as 'Module Code',
+	COUNT(sID) as 'Number of Students Enrolled'
+FROM Enrolment
+GROUP BY mCode;
+
+
+-- 2.3
+.print ''
+.print '2.3 - All students that have not enrolled in any module.'
+
+SELECT 
+	sID as 'ID',
+	sName as 'Name'
+FROM
+	Student s
+WHERE NOT EXISTS (
+	SELECT 1 
+	FROM Enrolment
+	WHERE sID = s.sID
+);
+
+-- 2.4
+.print ''
+.print '2.4 - List all student enrollments.'
+
+SELECT
+	sName as 'Student',
+	mTitle as 'Module'
+FROM
+	Student NATURAL JOIN Enrolment NATURAL JOIN Module
+ORDER BY
+	sID;
+
+-- 2.5
+.print ''
+.print '2.5 - All modules and number of students enrolled.'
+
+INSERT INTO Module VALUES ('TEST', 10, 'Test');
+
+SELECT
+	Module.mCode as 'Code',
+	mTitle as 'Module Title',
+	COUNT(Enrolment.sID) as 'Number Enrolled'
+FROM
+	Module LEFT OUTER JOIN Enrolment ON Module.mCode = Enrolment.mCode
+GROUP BY
+	Enrolment.mCode;
+
+-- 2.6
+.print ''
+.print '2.6 - Number of Credits Enrolled in for each Student.'
+
+-- In general, the following is a sufficient solution:
+
+SELECT 
+	sName as 'Student', 
+	SUM(Module.mCredits) as 'Number of Credits'
+FROM 
+	Student NATURAL JOIN Enrolment NATURAL JOIN Module
+GROUP BY 
+	Student.sID 
+ORDER BY SUM(mCredits) DESC;
+
+/* 
+If however, we want to fully answer the question, we need to consider
+situations where a student is not enrolled in any module. We encountered
+a similar situation in 2.5 , which was simplified somewhat since  COUNT 
+will return zero when there is an absence of a value. Here however,
+we are required to use SUM. SUM of a NULL value, is undefined, and certainly
+is not zero. 
+
+The solutions below give an example of this. To answer this question fully,
+additional bookwork was required - well done to those of you who realised this
+and did the necessary self-study.
+
+*/
+
+SELECT 
+	sName AS 'Student', 
+	COALESCE(SUM(Module.mCredits), 0) AS 'Number of Credits'
+FROM 
+	Student LEFT OUTER JOIN Enrolment ON Student.sID = Enrolment.sID
+	LEFT OUTER JOIN Module ON Enrolment.mCode = Module.mCode
+GROUP BY 
+	Student.sid
+ORDER BY 
+	COALESCE(SUM(Module.mCredits), 0) DESC;

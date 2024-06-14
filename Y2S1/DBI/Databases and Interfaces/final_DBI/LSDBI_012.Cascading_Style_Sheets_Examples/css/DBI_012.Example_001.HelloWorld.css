@@ -1,0 +1,14 @@
+/* css/DBI_012.Example_001.HelloWorld.css */
+
+p {
+	color: orangered;
+	background-color: lightgray;
+
+	font-size: 200%; /* relative to the element's font size */
+	font-weight: bold;
+	text-align: center;
+
+	border: 5px solid darkgrey;
+	width: 50%;
+	margin: auto;
+}
